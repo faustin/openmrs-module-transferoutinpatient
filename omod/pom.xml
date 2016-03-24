@@ -28,6 +28,19 @@
 			<artifactId>openmrs-web</artifactId>
 			<type>jar</type>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>mohtracportal-api</artifactId>
+			<scope>provided</scope>
+			<version>${mohtracPortalVersion}</version>
+		</dependency>
+		<dependency>
+ 			<groupId>org.openmrs.module</groupId>
+ 			<artifactId>mohorderentrybridge-api</artifactId>
+			<version>${mohorderentrybridgeVersion}</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

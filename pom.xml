@@ -53,10 +53,11 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<properties>
 		<openMRSVersion>1.11.5</openMRSVersion>
-	</properties>
+		<mohtracPortalVersion>0.2.5</mohtracPortalVersion>
+		<mohorderentrybridgeVersion>1.0-beta</mohorderentrybridgeVersion>
+	</properties>	
 
 	<build>
 		<pluginManagement>

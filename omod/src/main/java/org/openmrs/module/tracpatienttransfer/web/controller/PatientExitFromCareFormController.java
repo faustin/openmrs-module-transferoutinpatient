@@ -33,6 +33,7 @@ import org.openmrs.web.WebConstants;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 import org.springframework.web.servlet.view.RedirectView;
+import org.openmrs.module.mohorderentrybridge.api.MoHOrderEntryBridgeService;
 
 /**
  * @author Administrator
@@ -167,26 +168,30 @@ public class PatientExitFromCareFormController extends
 	private boolean stopAllOrders(int patientId, Date discontinuedDate,
 			HttpServletRequest request) {
 		Patient p = Context.getPatientService().getPatient(patientId);
-		List<DrugOrder> drugOrders = Context.getOrderService()
-				.getDrugOrdersByPatient(p);
+		List<DrugOrder> drugOrders = Context.getService(MoHOrderEntryBridgeService.class).getDrugOrdersByPatient(p);
+		
+		
 		Concept discontinuedReason = Context.getConceptService().getConcept(
 				Integer.parseInt(request.getParameter("reasonExitCare")));
 		try {
 			for (DrugOrder drOr : drugOrders) {
 				DrugOrder dr = null;
-				if (!drOr.getDiscontinued()) {
+				if (drOr.isActive()) {
 					dr = drOr;
-					dr.setDiscontinued(true);
-					dr.setDiscontinuedBy(Context.getAuthenticatedUser());
-					dr.setDiscontinuedDate(discontinuedDate);
-					dr.setDiscontinuedReason(discontinuedReason);
+					//dr.setDiscontinued(true);
+					//dr.setDiscontinuedBy(Context.getAuthenticatedUser());
+					dr.setAutoExpireDate(discontinuedDate);
+					dr.setOrderReason(discontinuedReason);
 
 					log
 							.info(">>>>>>>>>>>>PatientExitedFromCare>>> Trying to stop DrugOrder#"
 									+ dr.getOrderId()
 									+ " for Patient#"
 									+ dr.getPatient().getPatientId());
-					Context.getOrderService().updateOrder(dr);
+					
+					Context.getOrderService().saveOrder(dr, null);
+					
+					
 					log
 							.info(">>>>>>>>>>>>PatientExitedFromCare>>> Order stopped");
 				}
